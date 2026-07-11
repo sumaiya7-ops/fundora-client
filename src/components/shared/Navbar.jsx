@@ -1,82 +1,136 @@
-import { LogOut, Menu, Wallet, X } from "lucide-react";
+import { LogOut, Menu, Search, Wallet, X } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Firebase setup করার পর real user আসবে
+  // Firebase setup হলে real user use করব
   const user = null;
   const dbUser = null;
 
+  const closeMenu = () => setMenuOpen(false);
+
   const navLinkStyle = ({ isActive }) =>
-    `text-sm font-semibold ${
+    `text-[13px] font-medium transition ${
       isActive
-        ? "text-emerald-600"
-        : "text-slate-600 hover:text-emerald-600"
+        ? "text-[#008A5A]"
+        : "text-[#344054] hover:text-[#008A5A]"
     }`;
 
+  const menuLinks = (
+    <>
+      <NavLink
+        to="/explore-campaigns"
+        className={navLinkStyle}
+        onClick={closeMenu}
+      >
+        Explore Campaigns
+      </NavLink>
+
+      <a
+        href="/#how-it-works"
+        className="text-[13px] font-medium text-[#344054] transition hover:text-[#008A5A]"
+        onClick={closeMenu}
+      >
+        How It Works
+      </a>
+
+      <a
+        href="/#categories"
+        className="text-[13px] font-medium text-[#344054] transition hover:text-[#008A5A]"
+        onClick={closeMenu}
+      >
+        Categories
+      </a>
+
+      <a
+        href="/#about"
+        className="text-[13px] font-medium text-[#344054] transition hover:text-[#008A5A]"
+        onClick={closeMenu}
+      >
+        About Us
+      </a>
+    </>
+  );
+
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E8E5DE] bg-[#FAF9F6]/95 backdrop-blur-xl">
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-lg font-extrabold text-white shadow-sm">
-            F
+    <header className="sticky top-0 z-50 border-b border-[#E9E7E1] bg-[#FBFAF7]/95 backdrop-blur-md">
+      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 lg:px-8">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#008A5A]">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5 text-white"
+              fill="currentColor"
+            >
+              <path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 4.2 5.2 2.9-2.3 1.3L12 8.8l-2.9 1.6-2.3-1.3L12 6.2Zm-5 5.2 3 1.7v4.4l-3-1.7v-4.4Zm5 7.2v-4.4l3-1.7v4.4l-3 1.7Z" />
+            </svg>
           </div>
 
-          <span className="font-[Manrope] text-2xl font-extrabold tracking-tight text-slate-900">
+          <span className="text-xl font-bold tracking-tight text-[#102A2A]">
             Fundora
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
-          <NavLink to="/explore-campaigns" className={navLinkStyle}>
-            Explore Campaigns
-          </NavLink>
-
-          {user && (
-            <NavLink to="/dashboard" className={navLinkStyle}>
-              Dashboard
-            </NavLink>
-          )}
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-8 lg:flex">
+          {menuLinks}
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
+        {/* Desktop Actions */}
+        <div className="hidden items-center gap-3 lg:flex">
+          <button
+            type="button"
+            className="flex h-9 w-9 items-center justify-center text-[#344054] transition hover:text-[#008A5A]"
+            aria-label="Search"
+          >
+            <Search size={18} strokeWidth={1.8} />
+          </button>
+
           {user ? (
             <>
-              <div className="flex items-center gap-2 rounded-full bg-[#E8F7F0] px-4 py-2.5">
-                <Wallet size={17} className="text-emerald-600" />
+              <Link
+                to="/dashboard"
+                className="text-[13px] font-medium text-[#344054] hover:text-[#008A5A]"
+              >
+                Dashboard
+              </Link>
 
-                <span className="text-sm font-bold text-emerald-700">
-                  {dbUser?.credits || 0} Credits
-                </span>
+              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#344054]">
+                <Wallet size={15} className="text-[#008A5A]" />
+                {dbUser?.credits || 0} Credits
               </div>
 
               <div className="group relative">
-                <button type="button">
+                <button
+                  type="button"
+                  className="flex items-center gap-2"
+                >
                   <img
                     src={user?.photoURL}
                     alt={user?.displayName || "Fundora user"}
-                    className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm"
+                    className="h-8 w-8 rounded-full object-cover"
                   />
-                </button>
 
-                <div className="invisible absolute right-0 top-14 w-56 translate-y-2 rounded-2xl border border-[#ECE9E2] bg-white p-3 opacity-0 shadow-xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="border-b border-slate-100 px-3 py-2">
-                    <p className="font-bold text-slate-900">
+                  <div className="text-left">
+                    <p className="max-w-24 truncate text-[12px] font-semibold text-[#101828]">
                       {user?.displayName}
                     </p>
 
-                    <p className="mt-1 truncate text-xs text-slate-500">
-                      {user?.email}
+                    <p className="text-[10px] capitalize text-[#667085]">
+                      {dbUser?.role}
                     </p>
                   </div>
+                </button>
 
+                <div className="invisible absolute right-0 top-12 w-48 translate-y-2 rounded-lg border border-[#E9E7E1] bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   <button
                     type="button"
-                    className="mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-red-500 hover:bg-red-50"
+                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-50"
                   >
-                    <LogOut size={17} />
+                    <LogOut size={16} />
                     Logout
                   </button>
                 </div>
@@ -86,14 +140,14 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="text-sm font-semibold text-slate-600 hover:text-emerald-600"
+                className="rounded-md border border-[#D0D5DD] bg-white px-4 py-2 text-[12px] font-semibold text-[#344054] transition hover:border-[#008A5A] hover:text-[#008A5A]"
               >
                 Login
               </Link>
 
               <Link
                 to="/register"
-                className="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:-translate-y-0.5 hover:bg-emerald-700"
+                className="rounded-md bg-[#008A5A] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#00754C]"
               >
                 Register
               </Link>
@@ -104,93 +158,82 @@ const Navbar = () => {
             href="https://github.com/sumaiya7-ops/fundora-client"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 rounded-full border border-[#DCD8CF] bg-white px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-900 hover:bg-slate-900 hover:text-white"
+            className="rounded-md bg-[#006B4F] px-4 py-2 text-[12px] font-semibold text-white transition hover:bg-[#005C44]"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-[17px] w-[17px]"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.37-3.9-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.47.11-3.05 0 0 .97-.31 3.16 1.18A10.9 10.9 0 0 1 12 6.32c.98 0 1.95.13 2.87.39 2.2-1.49 3.16-1.18 3.16-1.18.63 1.58.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.71 5.38-5.29 5.67.42.36.79 1.07.79 2.16v3.04c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z" />
-            </svg>
-
             Join as Developer
           </a>
         </div>
 
+        {/* Mobile Menu Button */}
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E2DED5] bg-white text-slate-800 md:hidden"
+          className="flex h-9 w-9 items-center justify-center text-[#344054] lg:hidden"
           aria-label="Toggle navigation menu"
         >
           {menuOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
       </nav>
 
+      {/* Mobile Navigation */}
       {menuOpen && (
-        <div className="border-t border-[#E8E5DE] bg-[#FAF9F6] px-5 py-5 md:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-2">
-            <NavLink
-              to="/explore-campaigns"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-xl px-4 py-3 font-semibold text-slate-700 hover:bg-[#E8F7F0] hover:text-emerald-700"
-            >
-              Explore Campaigns
-            </NavLink>
+        <div className="border-t border-[#E9E7E1] bg-[#FBFAF7] lg:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-6">
+            {menuLinks}
 
-            {user ? (
-              <>
-                <NavLink
-                  to="/dashboard"
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl px-4 py-3 font-semibold text-slate-700 hover:bg-[#E8F7F0]"
-                >
-                  Dashboard
-                </NavLink>
+            <div className="border-t border-[#E9E7E1] pt-5">
+              {user ? (
+                <div className="flex flex-col gap-3">
+                  <Link
+                    to="/dashboard"
+                    onClick={closeMenu}
+                    className="text-sm font-medium text-[#344054]"
+                  >
+                    Dashboard
+                  </Link>
 
-                <div className="flex items-center gap-2 rounded-xl bg-[#E8F7F0] px-4 py-3 font-bold text-emerald-700">
-                  <Wallet size={18} />
-                  {dbUser?.credits || 0} Credits
+                  <div className="flex items-center gap-2 text-sm font-semibold text-[#344054]">
+                    <Wallet size={16} className="text-[#008A5A]" />
+                    {dbUser?.credits || 0} Credits
+                  </div>
+
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 text-sm font-medium text-red-500"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
                 </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  <Link
+                    to="/login"
+                    onClick={closeMenu}
+                    className="rounded-md border border-[#D0D5DD] bg-white px-4 py-2.5 text-center text-sm font-semibold text-[#344054]"
+                  >
+                    Login
+                  </Link>
 
-                <button
-                  type="button"
-                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-left font-semibold text-red-500 hover:bg-red-50"
-                >
-                  <LogOut size={18} />
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl px-4 py-3 font-semibold text-slate-700 hover:bg-[#E8F7F0]"
-                >
-                  Login
-                </Link>
+                  <Link
+                    to="/register"
+                    onClick={closeMenu}
+                    className="rounded-md bg-[#008A5A] px-4 py-2.5 text-center text-sm font-semibold text-white"
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
 
-                <Link
-                  to="/register"
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl bg-emerald-600 px-4 py-3 text-center font-bold text-white"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-
-            <a
-              href="https://github.com/sumaiya7-ops/fundora-client"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2 rounded-xl border border-[#DDD9D0] bg-white px-4 py-3 text-center font-bold text-slate-800"
-            >
-              Join as Developer
-            </a>
+              <a
+                href="https://github.com/sumaiya7-ops/fundora-client"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 block rounded-md bg-[#006B4F] px-4 py-2.5 text-center text-sm font-semibold text-white"
+              >
+                Join as Developer
+              </a>
+            </div>
           </div>
         </div>
       )}

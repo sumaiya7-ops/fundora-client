@@ -47,3 +47,22 @@ button {
   background-color: #d1fae5;
   color: #064e3b;
 }
+
+.fundora-hero .swiper-pagination {
+  bottom: 20px !important;
+}
+
+.fundora-hero .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  background: #98a2b3;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+.fundora-hero .swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 999px;
+  background: #008a5a;
+  opacity: 1;
+}
