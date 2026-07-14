@@ -14,6 +14,8 @@ import CampaignDetails from "../pages/Dashboard/Supporter/CampaignDetails";
 import MyContributions from "../pages/Dashboard/Supporter/MyContributions";
 import PurchaseCredit from "../pages/Dashboard/Supporter/PurchaseCredit";
 import Payment from "../pages/Dashboard/Supporter/Payment";
+import CampaignApprovals from "../pages/Dashboard/Admin/CampaignApprovals";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 
 
 const router = createBrowserRouter([
@@ -25,6 +27,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+ 
        {
         path: "register",
         element: <Register />,
@@ -43,6 +46,14 @@ const router = createBrowserRouter([
     {
   index: true,
   element: <Dashboard />,
+},
+ {
+      path: "campaign-approvals",
+      element: <CampaignApprovals />,
+    },
+    {
+  path: "manage-users",
+  element: <ManageUsers />,
 },
       {
   path: "add-campaign",

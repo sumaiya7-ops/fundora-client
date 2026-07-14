@@ -9,12 +9,14 @@ import {
   LayoutGrid,
   Plus,
   Users,
+  CheckCheck,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const roleMenus = {
   supporter: [
     { label: "Home", path: "/dashboard", icon: House },
+   
     {
       label: "Explore Campaigns",
       path: "/dashboard/explore-campaigns",
@@ -63,6 +65,11 @@ const roleMenus = {
 
   admin: [
     { label: "Home", path: "/dashboard", icon: House },
+     {
+    label: "Campaign Approvals",
+    path: "/dashboard/campaign-approvals",
+    icon: CheckCheck,
+  },
     {
       label: "Manage Users",
       path: "/dashboard/manage-users",
