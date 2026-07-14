@@ -5,7 +5,6 @@ import Register from "../pages/Auth/Register";
 import Login from "../pages/Auth/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import CreatorHome from "../pages/Dashboard/Creator/CreatorHome";
 import AddCampaign from "../pages/Dashboard/Creator/AddCampaign";
 import MyCampaigns from "../pages/Dashboard/Creator/MyCampaigns";
 import Withdrawals from "../pages/Dashboard/Creator/Withdrawals";
