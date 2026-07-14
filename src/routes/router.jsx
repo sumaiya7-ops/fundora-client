@@ -9,7 +9,12 @@ import CreatorHome from "../pages/Dashboard/Creator/CreatorHome";
 import AddCampaign from "../pages/Dashboard/Creator/AddCampaign";
 import MyCampaigns from "../pages/Dashboard/Creator/MyCampaigns";
 import Withdrawals from "../pages/Dashboard/Creator/Withdrawals";
-import PaymentHistory from "../pages/Dashboard/Creator/PaymentHistory";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory";
+import ExploreCampaigns from "../pages/Dashboard/Supporter/ExploreCampaigns";
+import CampaignDetails from "../pages/Dashboard/Supporter/CampaignDetails";
+import MyContributions from "../pages/Dashboard/Supporter/MyContributions";
+import PurchaseCredit from "../pages/Dashboard/Supporter/PurchaseCredit";
+import Payment from "../pages/Dashboard/Supporter/Payment";
 
 
 const router = createBrowserRouter([
@@ -36,10 +41,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
-      {
-        index: true,
-         element: <CreatorHome />,
-      },
+    {
+  index: true,
+  element: <Dashboard />,
+},
       {
   path: "add-campaign",
   element: <AddCampaign />,
@@ -55,7 +60,27 @@ const router = createBrowserRouter([
 {
   path: "payment-history",
   element: <PaymentHistory />,
-}
+},
+{
+  path: "explore-campaigns",
+  element: <ExploreCampaigns />,
+},
+{
+  path: "campaign/:id",
+  element: <CampaignDetails />,
+},
+{
+  path: "my-contributions",
+  element: <MyContributions />,
+},
+{
+  path: "purchase-credit",
+  element: <PurchaseCredit />,
+},
+{
+  path: "payment/:credits",
+  element: <Payment />,
+},
 
     ],
   },
