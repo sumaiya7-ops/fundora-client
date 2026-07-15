@@ -16,7 +16,9 @@ import PurchaseCredit from "../pages/Dashboard/Supporter/PurchaseCredit";
 import Payment from "../pages/Dashboard/Supporter/Payment";
 import CampaignApprovals from "../pages/Dashboard/Admin/CampaignApprovals";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
-
+import WithdrawalRequests from "../pages/Dashboard/Admin/WithdrawalRequests";
+import ManageCampaigns from "../pages/Dashboard/Admin/ManageCampaigns";
+import Reports from "../pages/Dashboard/Admin/Reports";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,18 @@ const router = createBrowserRouter([
     {
   path: "manage-users",
   element: <ManageUsers />,
+},
+{
+  path: "withdrawal-requests",
+  element: <WithdrawalRequests />,
+},
+{
+  path: "manage-campaigns",
+  element: <ManageCampaigns />,
+},
+{
+  path: "reports",
+  element: <Reports />,
 },
       {
   path: "add-campaign",

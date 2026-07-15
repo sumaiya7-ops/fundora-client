@@ -48,6 +48,18 @@ useEffect(() => {
 const handleWithdraw = async (event) => {
   event.preventDefault();
 
+  const credits = Number(withdrawCredits);
+
+if (credits > earnings.totalCredits) {
+  alert("You cannot withdraw more than your available credits.");
+  return;
+}
+
+if (credits < 200) {
+  alert("Minimum withdrawal is 200 credits.");
+  return;
+}
+
   const withdrawalData = {
     creator_email: user.email,
     creator_name: user.displayName || "Creator",
