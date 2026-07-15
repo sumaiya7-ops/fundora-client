@@ -18,6 +18,54 @@ const Reports = () => {
     }
   };
 
+  const handleSuspend = async (campaignId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/campaigns/suspend/${campaignId}`,
+      {
+        method: "PATCH",
+      }
+    );
+
+    const data = await response.json();
+
+    alert(data.message);
+
+    if (response.ok) {
+      fetchReports();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleDelete = async (campaignId) => {
+  const confirmDelete = confirm(
+    "Delete this campaign?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/campaigns/${campaignId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data = await response.json();
+
+    alert(data.message);
+
+    if (response.ok) {
+      fetchReports();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   useEffect(() => {
     fetchReports();
   }, []);
@@ -83,13 +131,19 @@ const Reports = () => {
                   </td>
 
                   <td className="px-6 py-4 text-center space-x-2">
-                    <button className="rounded bg-yellow-500 px-3 py-2 text-white">
-                      Suspend
-                    </button>
+                    <button
+  onClick={() => handleSuspend(report.campaign_id)}
+  className="rounded bg-yellow-500 px-3 py-2 text-white"
+>
+  Suspend
+</button>
 
-                    <button className="rounded bg-red-500 px-3 py-2 text-white">
-                      Delete
-                    </button>
+<button
+  onClick={() => handleDelete(report.campaign_id)}
+  className="rounded bg-red-500 px-3 py-2 text-white"
+>
+  Delete
+</button>
                   </td>
                 </tr>
               ))
