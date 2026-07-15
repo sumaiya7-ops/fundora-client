@@ -1,15 +1,32 @@
-import { LogOut, Menu, Search, Wallet, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import {
+  Bell,
+  LogOut,
+  Menu,
+  Search,
+  Wallet,
+  X,
+} from "lucide-react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+const [showNotifications, setShowNotifications] = useState(false);
 
   // Firebase setup হলে real user use করব
   const user = null;
   const dbUser = null;
 
   const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+  if (!user?.email) return;
+
+  fetch(`http://localhost:5000/notifications/${user.email}`)
+    .then((res) => res.json())
+    .then((data) => setNotifications(data));
+}, [user]);
 
   const navLinkStyle = ({ isActive }) =>
     `text-[13px] font-medium transition ${
@@ -86,7 +103,18 @@ const Navbar = () => {
             className="flex h-9 w-9 items-center justify-center text-[#344054] transition hover:text-[#008A5A]"
             aria-label="Search"
           >
-            <Search size={18} strokeWidth={1.8} />
+           <div className="relative">
+  <button
+    onClick={() => setShowNotifications(!showNotifications)}
+    className="relative"
+  >
+    <Bell size={18} />
+
+    {notifications.length > 0 && (
+      <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500"></span>
+    )}
+  </button>
+</div>
           </button>
 
           {user ? (
@@ -162,6 +190,23 @@ const Navbar = () => {
           >
             Join as Developer
           </a>
+
+          {showNotifications && (
+  <div className="absolute right-0 top-12 w-80 rounded-xl border bg-white shadow-lg p-4">
+    {notifications.length === 0 ? (
+      <p>No notifications</p>
+    ) : (
+      notifications.map((notification) => (
+        <div
+          key={notification._id}
+          className="border-b py-2 text-sm"
+        >
+          <p>{notification.message}</p>
+        </div>
+      ))
+    )}
+  </div>
+)}
         </div>
 
         {/* Mobile Menu Button */}
