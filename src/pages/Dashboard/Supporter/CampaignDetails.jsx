@@ -11,6 +11,7 @@ const [loading, setLoading] = useState(true);
 const { user, dbUser } = useOutletContext();
 
 const [contributionAmount, setContributionAmount] = useState("");
+const [reason, setReason] = useState("");
 
 
 useEffect(() => {
@@ -62,6 +63,36 @@ const handleContribution = async (e) => {
 
     if (response.ok) {
       setContributionAmount("");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleReport = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:5000/reports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reporter_name: dbUser.name,
+        reporter_email: user.email,
+        campaign_id: campaign._id,
+        campaign_title: campaign.campaign_title,
+        reason,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+
+    if (response.ok) {
+      setReason("");
     }
   } catch (error) {
     console.error(error);
@@ -193,6 +224,29 @@ if (!campaign) {
     className="mt-6 w-full rounded-2xl bg-[#008A5A] py-3 font-bold text-white transition hover:bg-[#00764D]"
   >
     Contribute Now
+  </button>
+</form>
+<form
+  onSubmit={handleReport}
+  className="mt-6 rounded-3xl border border-[#E9E7E1] bg-white p-6"
+>
+  <h3 className="text-xl font-bold text-[#101828]">
+    Report Campaign
+  </h3>
+
+  <textarea
+    value={reason}
+    onChange={(e) => setReason(e.target.value)}
+    placeholder="Why are you reporting this campaign?"
+    required
+    className="mt-4 h-28 w-full rounded-2xl border border-[#E2E8E4] px-4 py-3 outline-none focus:border-[#008A5A]"
+  />
+
+  <button
+    type="submit"
+    className="mt-4 w-full rounded-2xl bg-red-500 py-3 font-bold text-white hover:bg-red-600"
+  >
+    Report Campaign
   </button>
 </form>
   </div>
