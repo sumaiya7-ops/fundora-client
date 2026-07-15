@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink} from "react-router-dom";
 import {
   Bell,
   LogOut,
@@ -11,16 +11,16 @@ import {
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+ 
+const closeMenu = () => setMenuOpen(false);
   const [notifications, setNotifications] = useState([]);
 const [showNotifications, setShowNotifications] = useState(false);
 
   // Firebase setup হলে real user use করব
-  const user = null;
-  const dbUser = null;
+const user = null;
+const dbUser = null;
 
-  const closeMenu = () => setMenuOpen(false);
-
-  useEffect(() => {
+useEffect(() => {
   if (!user?.email) return;
 
   fetch(`http://localhost:5000/notifications/${user.email}`)
@@ -98,15 +98,19 @@ const [showNotifications, setShowNotifications] = useState(false);
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">
-          <button
-            type="button"
-            className="flex h-9 w-9 items-center justify-center text-[#344054] transition hover:text-[#008A5A]"
-            aria-label="Search"
-          >
-           <div className="relative">
+       <button
+  type="button"
+  className="flex h-9 w-9 items-center justify-center text-[#344054] transition hover:text-[#008A5A]"
+  aria-label="Search"
+>
+  <Search size={18} strokeWidth={1.8} />
+</button>
+
+<div className="relative">
   <button
+    type="button"
     onClick={() => setShowNotifications(!showNotifications)}
-    className="relative"
+    className="flex h-9 w-9 items-center justify-center text-[#344054] transition hover:text-[#008A5A]"
   >
     <Bell size={18} />
 
@@ -114,8 +118,24 @@ const [showNotifications, setShowNotifications] = useState(false);
       <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500"></span>
     )}
   </button>
+
+  {showNotifications && (
+    <div className="absolute right-0 mt-2 w-80 rounded-xl border bg-white p-4 shadow-lg">
+      {notifications.length === 0 ? (
+        <p>No notifications</p>
+      ) : (
+        notifications.map((notification) => (
+          <div
+            key={notification._id}
+            className="border-b py-2 text-sm"
+          >
+            {notification.message}
+          </div>
+        ))
+      )}
+    </div>
+  )}
 </div>
-          </button>
 
           {user ? (
             <>
@@ -191,23 +211,8 @@ const [showNotifications, setShowNotifications] = useState(false);
             Join as Developer
           </a>
 
-          {showNotifications && (
-  <div className="absolute right-0 top-12 w-80 rounded-xl border bg-white shadow-lg p-4">
-    {notifications.length === 0 ? (
-      <p>No notifications</p>
-    ) : (
-      notifications.map((notification) => (
-        <div
-          key={notification._id}
-          className="border-b py-2 text-sm"
-        >
-          <p>{notification.message}</p>
-        </div>
-      ))
-    )}
-  </div>
-)}
-        </div>
+ 
+          </div>
 
         {/* Mobile Menu Button */}
         <button
