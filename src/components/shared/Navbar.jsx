@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink} from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
 import {
   Bell,
   LogOut,
@@ -9,24 +11,57 @@ import {
   X,
 } from "lucide-react";
 
+
 const Navbar = () => {
+  const { user, loading, logout } = useAuth();
+
   const [menuOpen, setMenuOpen] = useState(false);
  
 const closeMenu = () => setMenuOpen(false);
+const handleLogout = async () => {
+  try {
+    await logout();
+  } catch (error) {
+    console.error(error);
+  }
+};
   const [notifications, setNotifications] = useState([]);
 const [showNotifications, setShowNotifications] = useState(false);
+const [dbUser, setDbUser] = useState(null);
 
   // Firebase setup হলে real user use করব
-const user = null;
-const dbUser = null;
+useEffect(() => {
+  const token = localStorage.getItem("access-token");
+
+  console.log("Navbar Token:", token);
+
+  if (!user?.email || !token) return;
+
+  fetch(`http://localhost:5000/notifications/${user.email}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => setNotifications(data))
+    .catch((err) => console.error(err));
+}, [user]);
 
 useEffect(() => {
-  if (!user?.email) return;
+  const token = localStorage.getItem("access-token");
 
-  fetch(`http://localhost:5000/notifications/${user.email}`)
+  if (!user?.email || !token) return;
+
+  fetch(`http://localhost:5000/users/${user.email}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
     .then((res) => res.json())
-    .then((data) => setNotifications(data));
+    .then((data) => setDbUser(data))
+    .catch((err) => console.error(err));
 }, [user]);
+
 
   const navLinkStyle = ({ isActive }) =>
     `text-[13px] font-medium transition ${
@@ -176,6 +211,7 @@ useEffect(() => {
                 <div className="invisible absolute right-0 top-12 w-48 translate-y-2 rounded-lg border border-[#E9E7E1] bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   <button
                     type="button"
+                    onClick={handleLogout}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500 hover:bg-red-50"
                   >
                     <LogOut size={16} />
@@ -249,6 +285,7 @@ useEffect(() => {
 
                   <button
                     type="button"
+                     onClick={handleLogout}
                     className="flex items-center gap-2 text-sm font-medium text-red-500"
                   >
                     <LogOut size={16} />

@@ -19,6 +19,7 @@ import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import WithdrawalRequests from "../pages/Dashboard/Admin/WithdrawalRequests";
 import ManageCampaigns from "../pages/Dashboard/Admin/ManageCampaigns";
 import Reports from "../pages/Dashboard/Admin/Reports";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,9 +42,13 @@ const router = createBrowserRouter([
     ],
   },
 
-   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+ {
+  path: "/dashboard",
+  element: (
+    <PrivateRoute>
+      <DashboardLayout />
+    </PrivateRoute>
+  ),
     children: [
     {
   index: true,

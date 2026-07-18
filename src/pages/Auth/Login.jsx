@@ -49,6 +49,24 @@ const navigate = useNavigate();
 
     console.log("Logged in user:", result.user);
 
+
+const jwtRes = await fetch("http://localhost:5000/jwt", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: result.user.email,
+  }),
+});
+
+const jwtData = await jwtRes.json();
+
+console.log(jwtData);
+console.log(jwtData.token);
+
+localStorage.setItem("access-token", jwtData.token);
+
     navigate("/dashboard");
   } catch (err) {
     console.log("Login error:", err.code);
@@ -97,6 +115,22 @@ if (!response.ok) {
 }
 
 console.log("Google MongoDB user:", userData);
+
+
+const jwtRes = await fetch("http://localhost:5000/jwt", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: result.user.email,
+  }),
+});
+
+const jwtData = await jwtRes.json();
+
+localStorage.setItem("access-token", jwtData.token);
+
 
 navigate("/dashboard");
 

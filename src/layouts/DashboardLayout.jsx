@@ -20,10 +20,14 @@ const DashboardLayout = () => {
 
       if (currentUser?.email) {
         try {
-          const response = await fetch(
-            `http://localhost:5000/users/${currentUser.email}`
-          );
-
+         const response = await fetch(
+  `http://localhost:5000/users/${currentUser.email}`,
+  {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("access-token")}`,
+    },
+  }
+);
           const data = await response.json();
 
           if (response.ok) {

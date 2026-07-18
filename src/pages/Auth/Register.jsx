@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -12,7 +12,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 const [error, setError] = useState("");
 const [loading, setLoading] = useState(false);
-
+const navigate = useNavigate();
 
 const handleRegister = async (e) => {
   e.preventDefault();
@@ -82,6 +82,22 @@ if (!response.ok) {
 }
 
 console.log("MongoDB user:", userData);
+
+const jwtRes = await fetch("http://localhost:5000/jwt", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: result.user.email,
+  }),
+});
+
+const jwtData = await jwtRes.json();
+
+localStorage.setItem("access-token", jwtData.token);
+
+navigate("/dashboard");
 
 form.reset();
 

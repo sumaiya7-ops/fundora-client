@@ -7,6 +7,8 @@ const MyContributions = () => {
   const { user } = useOutletContext();
 
 const [contributions, setContributions] = useState([]);
+const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
 const [loading, setLoading] = useState(true);
 
 useEffect(() => {
@@ -15,17 +17,29 @@ useEffect(() => {
     return;
   }
 
+    setLoading(true);
+
   const fetchContributions = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/contributions/supporter/${user.email}`
-      );
+   const response = await fetch(
+  `http://localhost:5000/contributions/supporter/${user.email}?page=${page}&limit=5`,
+  {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("access-token")}`,
+    },
+  }
+);
 
-      const data = await response.json();
+ const data = await response.json();
 
-      if (response.ok) {
-        setContributions(data);
-      }
+if (!response.ok) {
+  console.log(data.message);
+  return;
+}
+
+setContributions(data.contributions);
+setTotalPages(data.totalPages);
+
     } catch (error) {
       console.error("My contributions error:", error);
     } finally {
@@ -34,7 +48,7 @@ useEffect(() => {
   };
 
   fetchContributions();
-}, [user?.email]);
+}, [user?.email, page]);
 
 if (loading) {
   return (
@@ -139,6 +153,39 @@ if (loading) {
       </tbody>
     </table>
   </div>
+
+  <div className="mt-6 flex items-center justify-center gap-2">
+  <button
+    onClick={() => setPage(page - 1)}
+    disabled={page === 1}
+    className="rounded-lg border px-4 py-2 disabled:opacity-40"
+  >
+    Previous
+  </button>
+
+  {Array.from({ length: totalPages }, (_, index) => (
+    <button
+      key={index}
+      onClick={() => setPage(index + 1)}
+      className={`rounded-lg px-4 py-2 ${
+        page === index + 1
+          ? "bg-[#008A5A] text-white"
+          : "border"
+      }`}
+    >
+      {index + 1}
+    </button>
+  ))}
+
+  <button
+    onClick={() => setPage(page + 1)}
+    disabled={page === totalPages}
+    className="rounded-lg border px-4 py-2 disabled:opacity-40"
+  >
+    Next
+  </button>
+</div>
+
 </div>
     </motion.section>
   );

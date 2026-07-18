@@ -19,7 +19,11 @@ const [approvedContributions, setApprovedContributions] = useState([]);
 const [loading, setLoading] = useState(true);
 
 useEffect(() => {
-  if (!user?.email) {
+  const token = localStorage.getItem("access-token");
+
+  console.log("Supporter Token:", token);
+
+  if (!user?.email || !token) {
     setLoading(false);
     return;
   }
@@ -27,7 +31,12 @@ useEffect(() => {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/contributions/supporter-stats/${user.email}`
+        `http://localhost:5000/contributions/supporter-stats/${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const data = await response.json();
@@ -43,25 +52,28 @@ useEffect(() => {
   };
 
   const fetchApprovedContributions = async () => {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/contributions/approved/${user.email}`
-    );
+    try {
+      const response = await fetch(
+        `http://localhost:5000/contributions/approved/${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setApprovedContributions(data);
+      if (response.ok) {
+        setApprovedContributions(data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
   fetchStats();
   fetchApprovedContributions();
-
-
 }, [user?.email]);
 
 const statCards = [
